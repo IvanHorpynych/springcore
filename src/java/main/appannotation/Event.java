@@ -1,20 +1,23 @@
-package main.app;
+package main.appannotation;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Random;
 
+@Component
+@Scope("prototype")
 public class Event {
+    @Value("#{new java.util.Random().nextInt(T(java.lang.Integer).MAX_VALUE)}")
     int id;
     String message;
+    @Value("#{new  java.util.Date()}")
     Date date;
+    @Value("#{T(java.text.DateFormat).getDateTimeInstance()}")
     DateFormat df;
 
-    Event(Date date, DateFormat df){
-        this.id = new Random().nextInt(Integer.MAX_VALUE);
-        this.date = date;
-        this.df = df;
-    }
 
     public String getMessage() {
         return message;

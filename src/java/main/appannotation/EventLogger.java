@@ -1,4 +1,4 @@
-package main.app;
+package main.appannotation;
 
 public interface EventLogger {
 

@@ -1,5 +1,5 @@
-package main.app;
+package main.appannotation;
 
 public enum  EventType {
-    INFO, ERROR;
+    INFO, ERROR
 }

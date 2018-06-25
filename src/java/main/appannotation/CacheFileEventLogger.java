@@ -1,21 +1,26 @@
-package main.app;
+package main.appannotation;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CacheFileEventLogger extends FileEventLogger {
     List<Event> cache;
-    int cacheSize;
+    @Value("${cacheSize}")
+    String cacheSize;
 
-    private CacheFileEventLogger(String filePath, String encoding, int cacheSize) {
-        super(filePath, encoding);
+    protected CacheFileEventLogger(){
         this.cache = new ArrayList<>();
-        this.cacheSize = cacheSize;
     }
 
     public void logEvent(Event event) {
         cache.add(event);
-
+        Integer cacheSize = Integer.valueOf(this.cacheSize);
         if (cache.size() >= cacheSize) {
             writeEventFromCache();
             cache.clear();
@@ -28,8 +33,9 @@ public class CacheFileEventLogger extends FileEventLogger {
         }
     }
 
-    private void destroy(){
-        if(!cache.isEmpty())
+    @PreDestroy
+    private void destroy() {
+        if (!cache.isEmpty())
             writeEventFromCache();
         System.out.println("destroy");
     }

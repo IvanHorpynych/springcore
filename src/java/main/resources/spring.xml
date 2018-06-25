@@ -9,21 +9,36 @@
 
     <import resource="loggers.xml"/>
 
-    <util:properties id="clientProp"
-                     location="classpath:client.properties"/>
+    <!--<util:properties id="clientProp"
+                     location="classpath:client.properties"/>-->
 
-    <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>classpath:client.properties</value>
             </list>
         </property>
+
         <property name="ignoreResourceNotFound" value="true" />
         <property name="systemPropertiesMode">
             <util:constant
                     static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE" />
         </property>
-    </bean>-->
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:logger.properties</value>
+            </list>
+        </property>
+
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="systemPropertiesMode">
+            <util:constant
+                    static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        </property>
+    </bean>
 
     <util:map id="loggerMap" map-class="java.util.HashMap">
         <entry key="INFO" value-ref="consoleEventLogger" />

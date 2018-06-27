@@ -14,7 +14,7 @@ public class FileEventLogger implements EventLogger {
         return file;
     }
 
-    protected FileEventLogger(String filePath, String encoding) {
+    public FileEventLogger(String filePath, String encoding) {
         this.filePath = filePath;
         this.encoding = encoding;
     }

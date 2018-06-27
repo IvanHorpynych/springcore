@@ -5,7 +5,9 @@
        xmlns:c="http://www.springframework.org/schema/c"
        xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
- 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+ 		http://www.springframework.org/schema/util
+ 		http://www.springframework.org/schema/util/spring-util.xsd">
 
     <import resource="loggers.xml"/>
 
@@ -19,10 +21,10 @@
             </list>
         </property>
 
-        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreResourceNotFound" value="true"/>
         <property name="systemPropertiesMode">
             <util:constant
-                    static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+                    static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
         </property>
     </bean>
 
@@ -33,22 +35,22 @@
             </list>
         </property>
 
-        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreResourceNotFound" value="true"/>
         <property name="systemPropertiesMode">
             <util:constant
-                    static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+                    static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
         </property>
     </bean>
 
     <util:map id="loggerMap" map-class="java.util.HashMap">
-        <entry key="INFO" value-ref="consoleEventLogger" />
-        <entry key="ERROR" value-ref="combinedEventLogger" />
+        <entry key="INFO" value-ref="consoleEventLogger"/>
+        <entry key="ERROR" value-ref="combinedEventLogger"/>
     </util:map>
 
     <bean id="client" class="main.app.Client"
-    c:id="${id}"
-    c:fullName="${name}"
-    p:greeting="${greeting}"/>
+          c:id="${id}"
+          c:fullName="${name}"
+          p:greeting="#{ '${greeting}' ?: systemEnvironment['USERNAME']}"/>
 
 
     <bean id="event" class="main.app.Event" scope="prototype">
@@ -62,7 +64,21 @@
 
     <bean id="app" class="main.app.App"
           c:client-ref="client"
-          c:eventLogger-ref="cacheFileEventLogger"
+          c:eventLogger-ref="#{T(main.app.Event).isDay()?'consoleEventLogger':'fileEventLogger'}"
           c:eventLoggers-ref="loggerMap"/>
+
+    <bean class="org.something.service.Manager">
+        <constructor-arg>
+            <bean id="supplier"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="profile" class="org.something.Profile">
+        <constructor-arg ref="admin"/>
+    </bean>
+
+    <bean id="admin" abstract="true">
+        <property value="YES"/>
+    </bean>
 
 </beans>

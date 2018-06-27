@@ -8,10 +8,10 @@ import java.util.Map;
 public class App {
     private Client client;
     private EventLogger defaultLogger;
-    Map<EventType, EventLogger > eventLoggers;
+    Map<EventType, EventLogger> eventLoggers;
 
     public App(Client client, EventLogger eventLogger,
-               Map<EventType, EventLogger > eventLoggers) {
+               Map<EventType, EventLogger> eventLoggers) {
         this.client = client;
         this.defaultLogger = eventLogger;
         this.eventLoggers = eventLoggers;
@@ -19,9 +19,13 @@ public class App {
 
     public void logEvent(Event event, EventType eventType) {
         EventLogger logger = eventLoggers.get(eventType);
-        if(logger == null)
+        if (logger == null)
             logger = defaultLogger;
         logger.logEvent(event);
+    }
+
+    public void logEvent(Event event) {
+        defaultLogger.logEvent(event);
     }
 
     public Client getClient() {
@@ -37,8 +41,8 @@ public class App {
         App app = (App) ctx.getBean("app");
         Event event = (Event) ctx.getBean("event");
         event.setMessage(app.getClient().getGreeting());
-        app.logEvent(event, EventType.ERROR);
-
+        //app.logEvent(event, EventType.ERROR);
+        app.logEvent(event);
         ctx.close();
     }
 }
